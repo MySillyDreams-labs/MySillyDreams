@@ -1,14 +1,13 @@
-package com.mysillydreams.springbootdemoapplication;
+package com.mysillydreams.eventmanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringbootdemoapplicationApplication {
+public class MySillyDreamsEventManagementApplication {
 
 	public static void main(String[] args) {
-
-		SpringApplication.run(SpringbootdemoapplicationApplication.class, args);
+		SpringApplication.run(MySillyDreamsEventManagementApplication.class, args);
 	}
 
 }
