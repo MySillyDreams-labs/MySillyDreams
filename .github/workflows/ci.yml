@@ -20,6 +20,9 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
+    - name: Grant execute permissions to gradlew
+      run: chmod +x gradlew
+
     - name: Cache Gradle packages
       uses: actions/cache@v2
       with:
