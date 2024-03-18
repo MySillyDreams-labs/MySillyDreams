@@ -3,8 +3,16 @@ name: Web CI/CD
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'src/main/java/**/*.java'
+      - 'src/main/resources/**/*'
+      - 'src/test/java/**/*.java'
   pull_request:
     branches: [ "master" ]
+    paths:
+      - 'src/main/java/**/*.java'
+      - 'src/main/resources/**/*'
+      - 'src/test/java/**/*.java'
 
 jobs:
   build:
