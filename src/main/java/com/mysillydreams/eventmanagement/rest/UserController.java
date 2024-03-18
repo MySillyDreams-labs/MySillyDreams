@@ -66,7 +66,6 @@ public class UserController {
     }
 
     // add mapping for PUT / users - update existing user
-
     @PutMapping("/users")
     public User updateUser(@RequestBody User user){
 
