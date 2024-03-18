@@ -37,7 +37,6 @@ public class UserController {
     }
 
     // add user
-
     @PostMapping("/users")
     public ResponseEntity<?> addUserOrUsers(@RequestBody User users) {
 
