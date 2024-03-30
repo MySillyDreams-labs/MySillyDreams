@@ -37,26 +37,26 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
 
-        # Docker build and push
+      # Docker build and push
       - name: Install Docker dependencies
         run: |
-            sudo apt-get update
-            sudo apt-get install -y \
+          sudo apt-get update
+          sudo apt-get install -y \
             apt-transport-https \
             ca-certificates \
             curl \
             gnupg-agent \
             software-properties-common
-            sudo apt-get clean
-            sudo apt-get autoremove --purge -y
+          sudo apt-get clean
+          sudo apt-get autoremove --purge -y
 
-            - name: Retry Docker Installation
-              run: |
-                sudo apt-get install -y docker.io
-                sudo apt-get install -y docker-compose
+      - name: Retry Docker Installation
+        run: |
+          sudo apt-get install -y docker.io
+          sudo apt-get install -y docker-compose
 
-            - name: Docker Version
-              run: docker --version
+      - name: Docker Version
+        run: docker --version
 
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -75,4 +75,3 @@ jobs:
         run: docker rm -f springboot-eventmangement-container
       - name: Run docker container
         run: docker run -d -p 8080:8080 --name springboot-eventmangement-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
-
