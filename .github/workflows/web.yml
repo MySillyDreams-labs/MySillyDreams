@@ -38,11 +38,26 @@ jobs:
         run: ./gradlew build --no-daemon
 
         # Docker build and push
-
-      - name: Install Docker
+      - name: Install Docker dependencies
         run: |
             sudo apt-get update
-            sudo apt-get install -y docker.io
+            sudo apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg-agent \
+            software-properties-common
+            sudo apt-get clean
+            sudo apt-get autoremove --purge -y
+
+            - name: Retry Docker Installation
+              run: |
+                sudo apt-get install -y docker.io
+                sudo apt-get install -y docker-compose
+
+            - name: Docker Version
+              run: docker --version
+
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build docker image
