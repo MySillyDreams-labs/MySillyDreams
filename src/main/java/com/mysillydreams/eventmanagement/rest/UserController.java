@@ -1,13 +1,16 @@
 package com.mysillydreams.eventmanagement.rest;
 
 import com.mysillydreams.eventmanagement.entity.User;
+import com.mysillydreams.eventmanagement.service.OtpService;
 import com.mysillydreams.eventmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/userapi")
@@ -87,4 +90,74 @@ public class UserController {
 
         return " Deleted user id - " + userId;
     }
+
+    @Autowired
+    private OtpService otpService;
+
+    @PostMapping("/sendotp")
+    public void sendOtp(@RequestBody User request) {
+        String mobileNumber = request.getMobileNumber().trim();
+        //mobileNumber = mobileNumber.trim();
+        String otp = otpService.generateOtp();
+        otpService.sendOtp(mobileNumber, otp);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @PostMapping("/verifyotp")
+//    public ResponseEntity<String> verifyOTP(@RequestParam String mobileNumber, @RequestParam String otp) {
+//        User user = userService.findByMobileNumber(mobileNumber);
+//        if (user != null && user.getMobileOTP() != null && user.getMobileOTP().equals(otp)
+//                && LocalDateTime.now().isBefore(user.getOtpExpiryTime())) {
+//            // OTP is valid
+//            // Clear OTP and expiry time
+//            user.setMobileOTP(null);
+//            user.setOtpExpiryTime(null);
+//            userService.save(user);
+//            return ResponseEntity.ok("OTP verified successfully");
+//        } else {
+//            // OTP is invalid or expired
+//            return ResponseEntity.badRequest().body("Invalid or expired OTP");
+//        }
+//    }
+
+//    @PostMapping("/generateotp")
+//    public ResponseEntity<String> generateOTP(@RequestParam String mobileNumber) {
+//        userService.generateAndSendOTP(mobileNumber);
+//        return ResponseEntity.ok("OTP generated and sent successfully");
+//    }
+
+//    @PostMapping("/generateotp")
+//    public ResponseEntity<String> generateOTP(@RequestBody Map<String, String> requestBody) {
+//        String mobileNumber = requestBody.get("mobileNumber");
+//        if (mobileNumber != null && !mobileNumber.isEmpty()) {
+//            String otp = userService.generateAndSendOTP(mobileNumber);
+//            return ResponseEntity.ok("OTP generated and sent successfully and otp is " + otp);
+//        } else {
+//            return ResponseEntity.badRequest().body("Mobile number is required");
+//        }
+//    }
+
+
+
 }

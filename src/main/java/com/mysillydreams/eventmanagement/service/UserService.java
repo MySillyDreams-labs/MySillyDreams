@@ -11,4 +11,6 @@ public interface UserService {
     User findById (int theId);
     User save (User user);
     void deleteById(int theId);
+
+    String generateAndSendOTP(String mobileNumber);
 }

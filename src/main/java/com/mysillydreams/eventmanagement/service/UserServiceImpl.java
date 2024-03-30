@@ -5,8 +5,10 @@ import com.mysillydreams.eventmanagement.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -50,5 +52,36 @@ public class UserServiceImpl implements UserService{
 
         userRepository.deleteById(theId);
     }
+
+//    @Override
+//    public User findByMobileNumber(String mobileNumber) {
+//        return userRepository.findByMobileNumber(mobileNumber);
+//    }
+
+    @Override
+    public String generateAndSendOTP(String mobileNumber) {
+        // Generate random 6-digit OTP
+//        Random random = new Random();
+//        String otp = String.format("%06d", random.nextInt(1000000));
+//
+//        // Find user by mobile number
+//        User user = userRepository.findByMobileNumber(mobileNumber);
+//        if (user != null) {
+//            // Set OTP and expiry time
+//            user.setMobileOTP(otp);
+//            user.setOtpExpiryTime(LocalDateTime.now().plusMinutes(5)); // OTP expires after 5 minutes
+//            userRepository.save(user);
+//
+//            // Send OTP to user's mobile number (you can implement your SMS sending logic here)
+//
+//            System.out.println("OTP sent to " + mobileNumber + ": " + otp);
+//
+//            return otp;
+//        } else {
+//            throw new RuntimeException("User not found for mobile number: " + mobileNumber);
+//        }
+        return null;
+    }
+
 
 }

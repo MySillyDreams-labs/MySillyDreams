@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class UserControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         LocalDate myDate = LocalDate.of(2022, 3, 16);
-        user = new User("John", "Doe", "john@example.com", "1234567890", myDate);
+        //user = new User("John", "Doe", "john@example.com", "1234567890", myDate);
+        user = new User("John", "Doe", "john@example.com", "1234567890", myDate, "234445", LocalDateTime.now().plusMinutes(5));
     }
 
     @Test

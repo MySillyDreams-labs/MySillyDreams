@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,8 @@ public class UserServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         myDate = LocalDate.of(2022, 3, 16);
-        user = new User("John", "Doe", "john@example.com", "1234567890", myDate);
+        //user = new User("John", "Doe", "john@example.com", "1234567890", myDate);
+        user = new User("John", "Doe", "john@example.com", "1234567890", myDate, "234445", LocalDateTime.now().plusMinutes(5));
     }
 
     @Test

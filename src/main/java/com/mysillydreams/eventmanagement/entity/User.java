@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="users")
@@ -26,24 +27,31 @@ public class User {
     private String email;
 
     @NotBlank(message = "Mobile number is required")
-    @Pattern(regexp = "^\\d{10}$", message = "Mobile number must be 10 digits")
+    @Pattern(regexp = "^\\d{15}$", message = "Mobile number must be 10 digits")
     @Column(name="mobile_number", unique = true) // Ensure mobileNumber is unique
     private String mobileNumber;
 
     @Column(name="date_of_birth")
     private LocalDate dateOfBirth; // Add dateOfBirth field
 
+    @Column(name="mobile_otp")
+    private String mobileOTP;
+    @Column(name="otp_expiry_time")
+    private LocalDateTime otpExpiryTime;
+
 
     public User(){
 
     }
 
-    public User(String firstName, String lastName, String email, String mobileNumber, LocalDate dateOfBirth) {
+    public User(String firstName, String lastName, String email, String mobileNumber, LocalDate dateOfBirth, String mobileOTP, LocalDateTime otpExpiryTime) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.mobileNumber = mobileNumber;
         this.dateOfBirth = dateOfBirth;
+        this.mobileOTP = mobileOTP;
+        this.otpExpiryTime = otpExpiryTime;
     }
 
     public int getId() {
@@ -94,15 +102,33 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public String getMobileOTP() {
+        return mobileOTP;
+    }
+
+    public void setMobileOTP(String mobileOTP) {
+        this.mobileOTP = mobileOTP;
+    }
+
+    public LocalDateTime getOtpExpiryTime() {
+        return otpExpiryTime;
+    }
+
+    public void setOtpExpiryTime(LocalDateTime otpExpiryTime) {
+        this.otpExpiryTime = otpExpiryTime;
+    }
+
     @Override
     public String toString() {
-        return "UserEntity{" +
+        return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", mobileNumber='" + mobileNumber + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
+                ", mobileOTP='" + mobileOTP + '\'' +
+                ", otpExpiryTime=" + otpExpiryTime +
                 '}';
     }
 }
