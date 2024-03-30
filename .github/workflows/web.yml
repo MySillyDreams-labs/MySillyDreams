@@ -39,11 +39,11 @@ jobs:
 
         # Docker build and push
       - name: Login to docker hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: docker login -u vijayyk7676 -p Praveen@663
       - name: Build docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/userapi-image .
+        run: docker build -t vijayyk7676/userapi-image .
       - name: Publish image to docker hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+        run: docker push vijayyk7676/userapi-image:latest
 
   deploy:
     needs: build
