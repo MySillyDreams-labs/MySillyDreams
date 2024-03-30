@@ -38,13 +38,12 @@ jobs:
         run: ./gradlew build --no-daemon
 
         # Docker build and push
-      - name: Docker Build, Tag, and Push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
-          context: .
-          file: ./Dockerfile
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/userapi-image .
+      - name: Publish image to docker hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
 
   deploy:
     needs: build
