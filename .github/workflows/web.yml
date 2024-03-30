@@ -39,11 +39,10 @@ jobs:
 
         # Docker build and push
 
-      - name: Set up Docker
-        uses: docker/setup-action@v2
-        with:
-            docker-version: '20.10.7'
-
+      - name: Install Docker
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y docker.io
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build docker image
