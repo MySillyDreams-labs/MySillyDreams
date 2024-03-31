@@ -51,8 +51,8 @@ jobs:
     runs-on: hyd-ap-south-2c
     steps:
       - name: Pull Image from docker hub
-        run: docker pull ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
       - name: Delete old container
-        run: docker rm -f springboot-eventmangement-container
+        run: sudo docker rm -f springboot-eventmangement-container
       - name: Run docker container
-        run: docker run -d -p 8080:8080 --name springboot-eventmangement-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+        run: sudo docker run -d -p 8080:8080 --name springboot-eventmangement-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
