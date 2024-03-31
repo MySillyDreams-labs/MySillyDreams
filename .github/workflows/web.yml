@@ -57,4 +57,8 @@ jobs:
       - name: Run ./run.sh in background
         run: sudo ./run.sh &
       - name: Run docker container
-        run: sudo docker run -d -p 8080:8080 --name springboot-eventmangement-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+        run: sudo docker run -d -p 8080:8080 --name springboot-eventmangement-container \
+          -e SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/EventMaster \
+          -e SPRING_DATASOURCE_USERNAME=postgres \
+          -e SPRING_DATASOURCE_PASSWORD=Praveen@663 \
+          ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
