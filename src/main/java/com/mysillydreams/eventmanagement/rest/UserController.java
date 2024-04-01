@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @GetMapping("/hello")
-    public void hello(){
-        System.out.println("Hi EC2");
+    public String hello(){
+        return "Hi EC2";
     }
+
 
 }
