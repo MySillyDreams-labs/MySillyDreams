@@ -20,6 +20,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public void hello(){
+        System.out.println("Hi");
+    }
 
     @GetMapping("/users")
     public List<User> userEntityList(){
