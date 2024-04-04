@@ -2,17 +2,15 @@ name: Web Application CI/CD
 
 on:
   push:
-    paths:
-      - 'src/main/java/**/*.java'
+    branches:
+      - master
   pull_request:
-    paths:
-      - 'src/main/java/**/*.java'
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && (contains(github.event.head_commit.added, 'src/main/java/') || contains(github.event.head_commit.modified, 'src/main/java/')) ||
-      github.event_name == 'pull_request' && (contains(github.event.pull_request.head.repo.full_name, github.repository) && (contains(github.event.pull_request.base.ref, 'main') || contains(github.event.pull_request.base.ref, 'master'))) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -53,8 +51,8 @@ jobs:
       - name: Pull Image from docker hub
         run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
       - name: Delete old container
-        run: sudo docker rm -f springboot-eventmangement-container
+        run: sudo docker rm -f user-api-container
       - name: Run ./run.sh in background
         run: sudo ./run.sh &
       - name: Run docker container
-        run: sudo docker run -d -p 8080:8080 --name springboot-eventmangement-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+        run: sudo docker run -d -p 8080:8080 --name user-api-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
