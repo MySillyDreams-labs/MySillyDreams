@@ -63,7 +63,7 @@ jobs:
           sudo apt-get install postgresql-client -y
 
       - name: Set up PostgreSQL Client
-        uses: rlespinasse/pgpass-action@v2
+        uses: lespinasse/pgpass-action@v2
         with:
           postgresql-uri: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
 
