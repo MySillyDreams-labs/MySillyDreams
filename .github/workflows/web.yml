@@ -47,11 +47,17 @@ jobs:
 
       # Check if PostgreSQL client is installed
       - name: Check PostgreSQL client installation
-        run: dpkg -l postgresql-client
+        id: check_postgresql
+        run: |
+          if dpkg -s postgresql-client &> /dev/null; then
+            echo "::set-output name=installed::true"
+          else
+            echo "::set-output name=installed::false"
+          fi
 
       # Install PostgreSQL client if not already installed
       - name: Install PostgreSQL Client
-        if: ${{ !contains(run.outputs, 'postgresql-client') }}
+        if: ${{ steps.check_postgresql.outputs.installed != 'true' }}
         run: |
           sudo apt-get update
           sudo apt-get install postgresql-client -y
