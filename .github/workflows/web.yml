@@ -87,4 +87,3 @@ jobs:
       - name: Run Docker container
         run: |
           sudo docker run -d -p 8080:8080 --name user-api-container ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
-  
