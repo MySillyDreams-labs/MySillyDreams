@@ -11,6 +11,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,24 +45,46 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
 
-      # Docker build and push
+      # Check if PostgreSQL client is installed
+      - name: Check PostgreSQL client installation
+        run: dpkg -l postgresql-client
 
-      - name: Login to docker hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/userapi-image .
-      - name: Publish image to docker hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+      # Install PostgreSQL client if not already installed
+      - name: Install PostgreSQL Client
+        if: ${{ !contains(run.outputs, 'postgresql-client') }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install postgresql-client -y
+
+      - name: Set up PostgreSQL Client
+        uses: rlespinasse/pgpass-action@v2
+        with:
+          postgresql-uri: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-userapi-image .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
 
   deploy:
     needs: build
     runs-on: hyd-ap-south-2c
     steps:
+      - name: Start self-hosted runner
+        run: ./start-runner.sh || true
       - name: Pull Image from docker hub
-        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
-      - name: Delete old container
-        run: sudo docker rm -f user-api-container
-      - name: Run ./run.sh in background
-        run: sudo ./run.sh &
-      - name: Run docker container
-        run: sudo docker run -d -p 8080:8080 --name user-api-container ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
+        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
+
+      - name: Stop and remove existing container
+        run: |
+          sudo docker stop user-api-container || true
+          sudo docker rm -f user-api-container || true
+
+      - name: Run Docker container
+        run: |
+          sudo docker run -d -p 8080:8080 --name user-api-container ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
+  
