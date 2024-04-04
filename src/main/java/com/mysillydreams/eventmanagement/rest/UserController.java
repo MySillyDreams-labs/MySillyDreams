@@ -24,7 +24,6 @@ public class UserController {
     public void hello(){
         System.out.println("Hi");
     }
-
     @GetMapping("/users")
     public List<User> userEntityList(){
         return userService.findAll();
