@@ -63,9 +63,10 @@ jobs:
           sudo apt-get install postgresql-client -y
 
       - name: Set up PostgreSQL Client
-        uses: lespinasse/pgpass-action@v2
-        with:
-          postgresql-uri: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/$POSTGRES_DB
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: |
+          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT * FROM users;"
 
       - name: Build Docker image
         run: |
