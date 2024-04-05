@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: Set up PostgreSQL in application.properties
         run: |
+              cd E:/MySillyDreams/Deplot-to-Ec2/MySillyDreams
               echo "spring.datasource.url=jdbc:postgresql://localhost:5432/${{ secrets.POSTGRES_DB }}" >> src/main/resources/application.properties
               echo "spring.datasource.username=${{ secrets.POSTGRES_USER }}" >> src/main/resources/application.properties
               echo "spring.datasource.password=${{ secrets.POSTGRES_PASSWORD }}" >> src/main/resources/application.properties
