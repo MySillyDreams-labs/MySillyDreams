@@ -58,9 +58,9 @@ jobs:
 
       - name: Set up PostgreSQL Client
         env:
-          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          PGPASSWORD: Praveen@663
         run: |
-          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT version();"
+          psql -h localhost -U postgres -d EventMaster -c "SELECT version();"
 
       - name: Build Docker images
         run: |
