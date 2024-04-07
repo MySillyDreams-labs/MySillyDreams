@@ -53,46 +53,33 @@ jobs:
           sudo apt-get update
           sudo apt-get install postgresql-client -y
 
+      - name: Wait for PostgreSQL to start
+        run: docker-compose up -d postgres && sleep 15
+
       - name: Set up PostgreSQL Client
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT version();"
 
-      - name: Build Docker image for Spring Boot application
+      - name: Build Docker images
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/userapi-image .
+          docker-compose build
 
-      - name: Push Docker image for Spring Boot application to Docker Hub
+      - name: Push Docker images to Docker Hub
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
-
-      - name: Build Docker image for PostgreSQL
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-postgresql-image -f Dockerfile.postgresql .
-
-      - name: Push Docker image for PostgreSQL to Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-postgresql-image:latest
+          docker-compose push
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Pull Image for Spring Boot application from Docker Hub
-        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
-
-      - name: Pull Image for PostgreSQL from Docker Hub
-        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/my-postgresql-image:latest
+      - name: Pull Images from Docker Hub
+        run: docker-compose pull
 
       - name: Stop and remove existing containers
         run: |
-          sudo docker stop my-userapi-app || true
-          sudo docker rm -f my-userapi-app || true
-          sudo docker stop postgresql || true
-          sudo docker rm -f postgresql || true
+          docker-compose down --remove-orphans
 
       - name: Run Docker containers
-        run: |
-          sudo docker-compose up -d
+        run: docker-compose up -d
