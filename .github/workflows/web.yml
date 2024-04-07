@@ -57,7 +57,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Wait for PostgreSQL to start
-        run: docker-compose up -d my-userapi-app postgres && sleep 15
+        run: docker-compose up -d user-api-vijay postgres && sleep 15
 
       - name: Set up PostgreSQL Client
         env:
