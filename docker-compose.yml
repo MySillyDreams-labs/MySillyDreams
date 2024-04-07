@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   my-userapi-app:
-    image: vijayyk777/userapi-image:latest
+    image: user-api-vijay
     ports:
       - "8080:8080"
     environment:
@@ -16,7 +16,7 @@ services:
       - my-network
 
   postgres:
-    image: vijayyk777/my-postgresql-image:latest
+    image: postgres:latest
     ports:
       - "5432:5432"
     environment:

@@ -53,6 +53,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install postgresql-client -y
 
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Wait for PostgreSQL to start
         run: docker-compose up -d my-userapi-app postgres && sleep 15
 
@@ -74,6 +77,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Pull Images from Docker Hub
         run: docker-compose pull
 
