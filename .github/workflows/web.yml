@@ -57,16 +57,16 @@ jobs:
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          psql -h localhost -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT version();"
+          psql -h postgres -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -c "SELECT version();"
 
       - name: Build Docker image for Spring Boot application
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-userapi-image .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/userapi-image .
 
       - name: Push Docker image for Spring Boot application to Docker Hub
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
 
       - name: Build Docker image for PostgreSQL
         run: |
@@ -78,22 +78,21 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: hyd-ap-south-2c
+    runs-on: ubuntu-latest
     steps:
       - name: Pull Image for Spring Boot application from Docker Hub
-        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
+        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/userapi-image:latest
 
       - name: Pull Image for PostgreSQL from Docker Hub
         run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/my-postgresql-image:latest
 
       - name: Stop and remove existing containers
         run: |
-          sudo docker stop user-api-container || true
-          sudo docker rm -f user-api-container || true
-          sudo docker stop postgresql-container || true
-          sudo docker rm -f postgresql-container || true
+          sudo docker stop my-userapi-app || true
+          sudo docker rm -f my-userapi-app || true
+          sudo docker stop postgresql || true
+          sudo docker rm -f postgresql || true
 
       - name: Run Docker containers
         run: |
-          sudo docker run -d -p 8080:8080 --name user-api-container ${{ secrets.DOCKER_USERNAME }}/my-userapi-image:latest
-          sudo docker run -d -p 5432:5432 --name postgresql-container ${{ secrets.DOCKER_USERNAME }}/my-postgresql-image:latest
+          sudo docker-compose up -d

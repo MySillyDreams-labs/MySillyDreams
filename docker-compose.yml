@@ -3,26 +3,26 @@ version: '3.8'
 services:
 
   my-userapi-app:
-    image: userapi-image
+    image: ${DOCKER_USERNAME}/userapi-image:latest
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/EventMaster
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=Praveen@663
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - postgres
     networks:
       - my-network
 
   postgres:
-    image: postgres:latest
+    image: ${DOCKER_USERNAME}/my-postgresql-image:latest
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=EventMaster
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Praveen@663
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ./data:/var/lib/postgresql/data
     networks:
