@@ -89,3 +89,4 @@ jobs:
 
       - name: Run Docker containers
         run: docker-compose up -d
+
