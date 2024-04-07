@@ -32,6 +32,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
 
@@ -88,4 +89,3 @@ jobs:
 
       - name: Run Docker containers
         run: docker-compose up -d
-
