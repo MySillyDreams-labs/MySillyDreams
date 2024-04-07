@@ -54,7 +54,7 @@ jobs:
           sudo apt-get install postgresql-client -y
 
       - name: Wait for PostgreSQL to start
-        run: docker-compose up -d postgres && sleep 15
+        run: docker-compose up -d my-userapi-app postgres && sleep 15
 
       - name: Set up PostgreSQL Client
         env:
