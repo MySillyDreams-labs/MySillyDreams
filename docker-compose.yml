@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   my-userapi-app:
-    image: vijayyk777/userapi-image:latest
+    image: my-userapi-image:latest
     ports:
       - "8080:8080"
     environment:
