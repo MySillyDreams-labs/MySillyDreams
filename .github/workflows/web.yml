@@ -72,19 +72,8 @@ jobs:
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Debugging Info
+          # SSH into EC2 instance and run docker-compose commands
+      - name: SSH into EC2 instance and run docker-compose commands
         run: |
-            pwd
-            ls -la
-
-      - name: Pull Images from Docker Hub
-        run: docker-compose pull
-        working-directory: /
-
-      - name: Stop and remove existing containers
-        run: |
-          docker-compose down --remove-orphans
-
-      - name: Run Docker containers
-        run: docker-compose up -d
+              ssh -i msdjava.pem ubuntu@ec2-18-61-237-151.ap-south-2.compute.amazonaws.com 'cd /docker-compose-config && docker-compose pull && docker-compose down --remove-orphans && docker-compose up -d'
 
