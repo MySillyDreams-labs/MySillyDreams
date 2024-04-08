@@ -74,6 +74,7 @@ jobs:
 
       - name: Pull Images from Docker Hub
         run: docker-compose pull
+        working-directory: /
 
       - name: Stop and remove existing containers
         run: |
