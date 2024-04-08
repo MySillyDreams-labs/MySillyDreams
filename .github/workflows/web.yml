@@ -72,6 +72,11 @@ jobs:
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Debugging Info
+        run: |
+            pwd
+            ls -la
+
       - name: Pull Images from Docker Hub
         run: docker-compose pull
         working-directory: /
