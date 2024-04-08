@@ -76,4 +76,3 @@ jobs:
       - name: SSH into EC2 instance and run docker-compose commands
         run: |
               ssh -i msdjava.pem ubuntu@18.61.237.151 'cd /docker-compose-config && docker-compose pull && docker-compose down --remove-orphans && docker-compose up -d'
-
