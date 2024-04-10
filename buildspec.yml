@@ -1,39 +1,41 @@
-version: 0.1
+version: 0.2
+
 phases:
   pre_build:
     commands:
-      - echo Logging into Amazon ECR started on `date`
+      - echo "Logging into Amazon ECR started on $(date)"
       - aws --version
-      - echo Logging into Amazon ECR....
+      - echo "Logging into Amazon ECR..."
       - aws ecr get-login-password --region ap-south-2 | docker login --username AWS --password-stdin 447622263184.dkr.ecr.ap-south-2.amazonaws.com
-      - echo Setting repository URI....
-      - REPOSITORY_URI=447622263184.dkr.ecr.ap-south-2.amazonaws.com/msd
+      - echo "Setting repository URI..."
+      - export REPOSITORY_URI=447622263184.dkr.ecr.ap-south-2.amazonaws.com/msd
       - echo "REPOSITORY_URI is: $REPOSITORY_URI"
-      - echo Setting image tag....
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - echo "Setting image tag..."
+      - export IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
-      - echo Building and tagging started image on `date`
-      - echo Running gradle clean build....
+      - echo "Building and tagging started image on $(date)"
+      - echo "Running gradle clean build...."
       - gradle -version
       - gradle clean build
-      - echo Building the Docker image....
-      - docker build -t $REPOSITORY_URI:latest .
-      - echo Tagging the Docker image....
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Building the Docker image...."
+      - docker build -t "$REPOSITORY_URI:latest" .
+      - echo "Tagging the Docker image...."
+      - docker tag "$REPOSITORY_URI:latest" "$REPOSITORY_URI:$IMAGE_TAG"
   post_build:
     commands:
-      - echo Pushing Docker image to Amazon ECR started on `date`
-      - echo Pushing to repository....
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Setting container name....
-      - DOCKER_CONTAINER_NAME=apicontainer
-      - echo Writing image definition files....
-      - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - echo $DOCKER_CONTAINER_NAME
-      - echo Printing imagedefinitions.json
+      - echo "Pushing Docker image to Amazon ECR started on $(date)"
+      - echo "Pushing to repository...."
+      - docker push "$REPOSITORY_URI:latest"
+      - docker push "$REPOSITORY_URI:$IMAGE_TAG"
+      - echo "Setting container name...."
+      - export DOCKER_CONTAINER_NAME=apicontainer
+      - echo "Writing image definition files...."
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$DOCKER_CONTAINER_NAME" "$REPOSITORY_URI:$IMAGE_TAG" > imagedefinitions.json
+      - echo "$DOCKER_CONTAINER_NAME"
+      - echo "Printing imagedefinitions.json"
       - cat imagedefinitions.json
+
 artifacts:
   files:
     - imagedefinitions.json
