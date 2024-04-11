@@ -2,7 +2,6 @@ FROM gradle:8.6 AS build
 WORKDIR /app
 COPY build.gradle .
 COPY settings.gradle .
-COPY gradle.properties .
 COPY src src
 RUN gradle clean build --no-daemon
 
