@@ -1,16 +1,18 @@
+---
 version: 0.1
-
-REPOSITORY_URI: 447622263184.dkr.ecr.ap-south-2.amazonaws.com/msd
-IMAGE_TAG: build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-
 phases:
   pre_build:
     commands:
       - echo Logging into Amazon ECR started on `date`
       - aws --version
       - echo Logging into Amazon ECR....
-      - aws ecr get-login-password --region ap-south-2 | docker login --username AWS --password-stdin 447622263184.dkr.ecr.ap-south-2.amazonaws.com
+      - aws ecr get-login-password --region ap-south-2 | docker login --username
+        AWS --password-stdin 447622263184.dkr.ecr.ap-south-2.amazonaws.com
+      - echo Setting repository URI....
+      - REPOSITORY_URI=447622263184.dkr.ecr.ap-south-2.amazonaws.com/msd
       - echo REPOSITORY_URI is $REPOSITORY_URI
+      - echo Setting image tag....
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Building and tagging started image on `date`
@@ -30,7 +32,8 @@ phases:
       - echo Setting container name....
       - DOCKER_CONTAINER_NAME=apicontainer
       - echo Writing image definition files....
-      - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME
+        $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo $DOCKER_CONTAINER_NAME
       - echo Printing imagedefinitions.json
       - cat imagedefinitions.json
