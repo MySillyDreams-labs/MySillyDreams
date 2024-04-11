@@ -6,7 +6,7 @@ COPY gradle.properties .
 COPY src src
 RUN gradle clean build --no-daemon
 
-FROM adoptopenjdk/openjdk21:alpine-jre
+FROM openjdk
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
