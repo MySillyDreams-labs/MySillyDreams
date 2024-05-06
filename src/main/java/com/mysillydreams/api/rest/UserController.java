@@ -21,7 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("/users")
     public List<User> userEntityList() {
         return userService.findAll();
@@ -66,6 +65,40 @@ public class UserController {
             }
 
         }
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                "    <title>Welcome to MySilly Dreams</title>\n" +
+                "    <style>\n" +
+                "        body {\n" +
+                "            font-family: Arial, sans-serif;\n" +
+                "            background-color: #f0f0f0;\n" +
+                "            text-align: center;\n" +
+                "            margin-top: 100px;\n" +
+                "        }\n" +
+                "        h1 {\n" +
+                "            color: #333;\n" +
+                "            font-size: 36px;\n" +
+                "            margin-bottom: 20px;\n" +
+                "        }\n" +
+                "        p {\n" +
+                "            color: #666;\n" +
+                "            font-size: 18px;\n" +
+                "            margin-bottom: 40px;\n" +
+                "        }\n" +
+                "    </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <h1>Welcome to MySilly Dreams</h1>\n" +
+                "    <p>Hello, MySilly Dreams is here to make your dreams come true!</p>\n" +
+                "</body>\n" +
+                "</html>";
     }
 
 }
