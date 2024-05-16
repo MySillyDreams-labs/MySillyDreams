@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: postgres
+    password: ApidbPassword
+    url: "jdbc:postgresql://apidb.c1aqaic28woj.ap-south-2.rds.amazonaws.com:5432/apidb"
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: true
